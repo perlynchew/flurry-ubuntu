@@ -13,7 +13,7 @@ Download only the flurry-ubuntu.sh script and place it in your Ubuntu VM's /home
 
 Open a terminal in the /home/<user> directory and give the script permission to execute with the command:
 
-`chmod +x flurry-ubuntu.sh`
+`sudo chmod +x flurry-ubuntu.sh`
 
 Then, run it with:
 
