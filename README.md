@@ -1,3 +1,6 @@
+## Modifications from the original repository
+This fork fixes the incomplete codebase to allow the repository to run on Ubuntu. Additionally, it greatly modifies the original installation bash script to allow easy installation on Ubuntu 
+
 ## Flurry
 A fully automated framework to simulate host behavior and capture data provenance and system behavior for graph generation and representation learning.
 
@@ -5,76 +8,20 @@ A fully automated framework to simulate host behavior and capture data provenanc
 Flurry is a simulation framework for different types of systems that researchers may want to gather provenance data from. Flurry comes equipped with tools for provenance capture and provenance graph generation. Using Flurry, researchers may run either prewritten attack or benign behavior scripts, capture these system processes and accesses, and generate graphs from them, or run custom scripts. The framework is highly customizable so that nearly any contrivable scenario can be experimented with and tested.
 
 
-## Installation
-To make the Flurry installation process faster and less prone to mistakes, automatic install scripts are now provided. Two options are available: The first requires a premade Fedora or Ubuntu VM, while the second uses Hashicorp Packer to create one automatically.
+## Installation for Ubuntu
+Download only the flurry-ubuntu.sh script and place it in your Ubuntu VM's /home/<user> directory. The script will download all the other dependencies and the repository automatically.
 
-Option 1: Flurry installer
+Open a terminal in the /home/<user> directory and give the script permission to execute with the command:
 
-This option assumes you have a working Fedora 35 or Ubuntu 22.04 Desktop VM in VirtualBox.
-
-Installer scripts are available for Fedora 35 and Ubuntu 22.04. Other version numbers are unlikely to work without modifications, so make sure to create a virtual machine with one of these two operating systems. Currently, the scripts reside in the folder install-scripts/<distro> in this repo. Each distro folder contains the install script and a folder called "Packer". The Packer folder is NOT necessary for this option and can be safely ignored.
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/crest-lab/provenance/prov-grl/flurry.git
-git branch -M main
-git push -uf origin main
-```
-
-chmod +x flurry-fedora.sh
-
-- [ ] [Set up project integrations](https://gitlab.com/crest-lab/provenance/prov-grl/flurry/-/settings/integrations)
+`sudo chmod +x flurry-ubuntu.sh`
 
 Then, run it with:
 
-./flurry-fedora.sh
+`./flurry-ubuntu.sh`
 
+This script should NOT be run with sudo.
 
-You will need to enter your password once, and the installation should be completely automatic from that point on. This script should NOT be run with sudo.
-    After the script finishes, reboot the system. Hold shift during the VirtualBox splash screen to access the GRUB boot menu and make sure that the selected option has the word "camflow" in it. If it's the default option (which it should be), you should be able to let Virtualbox skip the boot menu from now on.
-
-For Ubuntu:
-    Download the flurry-ubuntu.sh script and place it in your Ubuntu VM's /home/<user> directory
-    Download all 8 of the deb files in install-scripts/Ubuntu and place them in the VM's /tmp directory. The install script will install all of them automatically.
-    Open a terminal in the /home/<user> directory and give the script permission to execute with the command:
-
-chmod +x flurry-ubuntu.sh
-
-
-Then, run it with:
-
-./flurry-ubuntu.sh
-
-
-    As with the Fedora script, you should only need to enter your password once. This script should NOT be run with sudo.
-    	After the script finishes, reboot the system. Hold shift during the Virtualbox splash screen to access the GRUB boot menu and select "Advanced Options for Ubuntu", then the option that has the word "camflow" in it. If these options are the default (they should be), you can let Virtualbox skip the boot menu from now on.
-
-Option 2: Packer
-
-This option is a bit more complex, but is also more customizable and does not require you to make a virtual machine in advance (Packer will make one automatically)
-
-First, install packer: https://www.packer.io/downloads
-
-Currently, the packer templates reside in the folder PROJ-SIS-CCI-CREST/Research/Prov-GRL/install scripts/<distro>/Packer in the shared Google Drive folder. Download the Packer folder for your desired Linux distro.
-
-Open a terminal in the folder you just downloaded. You should be in the same folder as the <distro>-server.pkr.hcl file
-
-Build the template. If you're using a Linux host, the command for the Fedora VM template is:
-
-packer build -var-file=fedora35.pkrvars.hcl -var 'vm_name=flurry-fedora' -var 'provider_name=virtualbox' fedora-server.pkr.hcl
-
-(this is all one line)
-
-and the command for Ubuntu is:
-
-packer build -var-file=ubuntu22.pkrvars.hcl -var 'vm_name=flurry-ubuntu' -var 'provider_name=virtualbox' ubuntu-server.pkr.hcl
-
-
-The build process should be automatic from there. When the build is finished, all VM windows will be closed and the results will be outputted to the "build" directory
-
-To create the VM, open up virtualbox, choose "Tools" on the left sidebar, then "Import" on the top. Navigate to the build folder and choose the ovf file that Packer created. Choose your import specs. The selected options should be enough to prevent crashes, but you may choose to use more or less cores and RAM depending on the capabilities of your host machine.
-
-Wait for Virtualbox to finish importing, then start the new VM. The password for the user "cyber" is ITIS6010
+This script will auto-reboot at the end.
 
 ## Provenance Capture Tools
 
@@ -140,23 +87,3 @@ c
 f
 
 
-## Support
-For support, please contact: mayakapoor99@gmail.com.
-
-## Roadmap
-Upcoming features include:
--- sysdig graph generation support
--- GUI for running Flurry
--- improved documentation
-
-## Contributing
-Contributions such as additional host configurations or filters for graph generation are welcome!
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-Licensed with MIT Open License.
-
-## Project status
-Continuing to be developed.
