@@ -4,8 +4,27 @@ then
     echo "(if all the git clone commands were run as root, the folders they download would be owned by root, making them unwritable by normal users)"
     exit
 fi
+
 echo "Adding NOPASSWD property to sudoers for ${USER}"
 sudo echo "${USER}   ALL = NOPASSWD: ALL" | sudo EDITOR='tee -a' visudo
+
+sudo apt install git
+echo "cloning repository"
+cd ~
+git clone https://github.com/perlynchew/flurry-ubuntu.git flurry
+
+cd flurry
+echo "moving deb files to /tmp folder"
+cd debfiles
+mv *.deb /tmp
+
+# initialise database file
+cd ~/flurry
+mkdir data
+touch data/camflow.db
+
+cd /home
+
 echo "installing camflow..."
 sudo apt install -y libpaho-mqtt1.3
 sudo dpkg -i /tmp/camconfd_0.5.2-1_amd64.deb
@@ -16,6 +35,7 @@ sudo dpkg -i /tmp/linux-headers-5.15.5-200.camflow.fc35_5.15.5-200.camflow.fc35-
 sudo dpkg -i /tmp/linux-image-5.15.5-200.camflow.fc35_5.15.5-200.camflow.fc35-1_amd64.deb
 sudo dpkg -i /tmp/linux-libc-dev_5.15.5-200.camflow.fc35-1_amd64.deb
 sudo dpkg -i /tmp/linux-image-5.15.5-200.camflow.fc35-dbg_5.15.5-200.camflow.fc35-1_amd64.deb
+
 
 echo "Enabling camflow services..."
 sudo systemctl enable camconfd.service
@@ -112,8 +132,12 @@ sudo apt update
 echo "installing wget if it wasn't already installed..."
 sudo apt install -y wget
 
+# install netstat for xampp
+sudo apt install net-tools
+
+# update method to download xampp
 echo "downloading xampp installer..."
-wget -O xampp-installer "https://downloadsapachefriends.global.ssl.fastly.net/8.1.6/xampp-linux-x64-8.1.6-0-installer.run?from_af=true"
+wget -O xampp-installer "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run"
 chmod +x xampp-installer
 echo "installing xampp (this part has no output)..."
 sudo ./xampp-installer --mode unattended
@@ -122,6 +146,7 @@ echo "adding xampp to path..."
 sudo sed -i "s/Defaults    secure_path = \/usr\/local\/sbin:\/usr\/local\/bin:\/usr\/sbin:\/usr\/bin:\/sbin:\/bin:\/var\/lib\/snapd\/snap\/bin/Defaults    secure_path = \/usr\/local\/sbin:\/usr\/local\/bin:\/usr\/sbin:\/usr\/bin:\/sbin:\/bin:\/var\/lib\/snapd\/snap\/bin:\/opt\/lampp/" /etc/sudoers
 echo "export PATH=\${PATH}:/opt/lampp" >> ~/.bashrc
 
+# setting up auto run of lampp
 echo "setting up cron jobs..."
 
 crontab -l > new_cron
@@ -146,17 +171,10 @@ sudo cp -r /opt/lampp/htdocs/DVWA/* /opt/lampp/htdocs
 
 sudo sh -c "sed \"s/\[ 'db_user' \]     = 'dvwa'/\[ 'db_user' \]     = 'root'/;s/\[ 'db_password' \] = 'p@ssw0rd'/\[ 'db_password' \]     = ''/\" /opt/lampp/htdocs/config/config.inc.php.dist > /opt/lampp/htdocs/config/config.inc.php"
 
-
-echo "Cloning Flurry Repo..."
-
-cd ~
-
-git clone https://sfrett:glpat-Y5ehixY4aaWByVMtzsFx@gitlab.com/crest-lab/provenance/prov-grl/flurry.git
-
+# default to v 114 as latest version of 116 is not available on chrome driver
 echo "installing chrome and chrome driver..."
-
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo apt install -y ./google-chrome-stable_current_amd64.deb
+wget http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.90-1_amd64.deb
+sudo apt install -y ./google-chrome-stable_114.0.5735.90-1_amd64.deb
 
 GC_VERSION=$(google-chrome --version)
 GC_VERSION_NUM=$(echo "$GC_VERSION" | cut -b 15- | cut -d "." -f 1)
@@ -187,6 +205,7 @@ sed -i "s/from collections import Mapping/from collections.abc import Mapping/" 
 echo "installing mosquitto..."
 sudo apt install -y mosquitto
 sudo systemctl enable mosquitto.service
+mosquitto -c ~/flurry/mosquitto/mosquitto.conf
 
 echo "installing hydra..."
 sudo apt install -y hydra
@@ -196,9 +215,9 @@ sudo apt install -y hping3
 echo "installing sysdig..."
 sudo apt install -y sysdig
 
-echo "Setting camflow kernel as default... (This might fail as it assumes the camflow kernel is the first option under \"Advanced options for Ubuntu\")"
+echo "Setting camflow kernel as default... "
 
-sudo sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT=1>0/" /etc/default/grub
+sudo sed -i 's/GRUB_DEFAULT=0/GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 5.15.5-200.camflow.fc35"/' /etc/default/grub
 
 sudo update-grub
 
