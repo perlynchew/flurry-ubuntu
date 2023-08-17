@@ -6,7 +6,7 @@ global DRIVER
 
 #driver = ds.setupDRIVER()
 
-DRIVER.get("http://127.0.0.1/vulnerabilities/exec/")
+DRIVER.get("http://127.0.0.1/DVWA/vulnerabilities/exec/")
 
 command_injection_message = "/html/body/div/div[3]/div/div/form/p/input[1]"
 command_injection_submit = "/html/body/div/div[3]/div/div/form/p/input[2]"

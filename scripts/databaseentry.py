@@ -5,7 +5,7 @@ from util.driversetup import DRIVER
 global DRIVER
 
 #DRIVER = ds.setupDRIVER()
-DRIVER.get("http://127.0.0.1/vulnerabilities/sqli/")
+DRIVER.get("http://127.0.0.1/DVWA/vulnerabilities/sqli/")
 
 injection_message = "/html/body/div/div[3]/div/div/form/p/input[1]"
 injection_submit = "/html/body/div/div[3]/div/div/form/p/input[2]"

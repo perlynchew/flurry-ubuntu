@@ -5,7 +5,7 @@ from util.driversetup import DRIVER
 global DRIVER
 
 #driver = ds.setupDriver()
-DRIVER.get("http://127.0.0.1/vulnerabilities/xss_r/")
+DRIVER.get("http://127.0.0.1/DVWA/vulnerabilities/xss_r/")
 
 injection_message = "/html/body/div/div[3]/div/div/form/p/input[1]"
 injection_submit = "/html/body/div/div[3]/div/div/form/p/input[2]"

