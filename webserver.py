@@ -90,7 +90,13 @@ def main():
     except Exception as e:
         print(e)
 
-    num_loops = int(input("Execution loop is constructed. How many iterations would you like to make? "))
+    num_loops = None
+    while num_loops is None:
+        try:
+            num_loops = int(input("Execution loop is constructed. How many iterations would you like to make? "))
+        except:
+            pass
+
     prov.print_menu()
     prov_level = int(input("Select provenance capture granularity: "))
     while prov_level < 1 or prov_level > 4:
