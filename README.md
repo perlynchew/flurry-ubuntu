@@ -11,7 +11,7 @@ Flurry is a simulation framework for different types of systems that researchers
 ## Installation for Ubuntu
 Download only the flurry-ubuntu.sh script and place it in your Ubuntu VM's /home/<user> directory. The script will download all the other dependencies and the repository automatically.
 
-Open a terminal in the /home/<user> directory and give the script permission to execute with the command:
+Open a terminal in the /home directory and give the script permission to execute with the command:
 
 `sudo chmod +x flurry-ubuntu.sh`
 
