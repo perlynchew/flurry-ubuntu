@@ -21,6 +21,8 @@ attack_menu_options = {
     'xssdom': 'Execute XSS DOM Attack',
     'commandinjection': 'Execute Command Injection Attack',
     'sqlinjection': 'Execute SQL Injection Attack',
+    'sqliunion': 'Execute SQL Injection with Union',
+    'sqliblind': 'Execute Blind SQL Injection Attack',
     'bruteforce': 'Execute Brute Force Attack',
     'customattack': 'Use My Own Attack'
 }
@@ -63,6 +65,10 @@ def main():
                 script = Path(os.getcwd() + "/scripts/commandinjection.py")
             elif action == "sqlinjection":
                 script = Path(os.getcwd() + "/scripts/sqlinjection.py")
+            elif action == "sqliunion":
+                script = Path(os.getcwd() + "/scripts/sqlinjection_union.py")
+            elif action == "sqliblind":
+                script = Path(os.getcwd() + "/scripts/sqlinjection_blind.py")
             elif action == "bruteforce":
                 script = Path(os.getcwd() + "/scripts/bruteforce.py")
             elif action == "message":
